@@ -46,7 +46,7 @@ async def nationtrigger(ctx, nations:str=None, channel:discord.TextChannel=None)
     nation_list = nations.split(",")
     task = asyncio.create_task(nation(nation_list, channel.id))
 
-    class Buttons(discord.ui.View):
+    class Buttons(discord.ui.View(timeout=None)):
         @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
         async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
             task.cancel()
@@ -61,7 +61,7 @@ async def regiontrigger(ctx, regions:str=None, channel:discord.TextChannel=None)
     region_list = regions.split(",")
     task = asyncio.create_task(region(region_list, channel.id))
 
-    class Buttons(discord.ui.View):
+    class Buttons(discord.ui.View(timeout=None)):
         @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
         async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
             task.cancel()
