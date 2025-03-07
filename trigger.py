@@ -52,7 +52,7 @@ async def nationtrigger(ctx, nations:str=None, channel:discord.TextChannel=None)
             task.cancel()
             await interaction.response.edit_message(content='SSE has been stopped', view=None)
 
-    await ctx.send("Connected, click button to stop SSE",view=Buttons())
+    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
 
 
 @client.hybrid_command(description="connect to sse with the admin bucket")
@@ -67,7 +67,7 @@ async def regiontrigger(ctx, regions:str=None, channel:discord.TextChannel=None)
             task.cancel()
             await interaction.response.edit_message(content='SSE has been stopped', view=None)
 
-    await ctx.send("Connected, click button to stop SSE",view=Buttons())
+    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
 
 
 keep_alive.keep_alive()
