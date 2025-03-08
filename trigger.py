@@ -134,7 +134,7 @@ async def populationtrigger(ctx, nations:str=None, channel:discord.TextChannel=N
 
 
 @client.hybrid_command(description="sends liberation warning messages. please input links. supports m+e and fpm")
-@app_commands.describe(moveplusendorse="m+e if yes")
+@app_commands.describe(moveplusendorse="m+e if yes", native="m+e target")
 @app_commands.choices(moveplusendorse=[
     app_commands.Choice(name='m+e', value="m+e"),
     app_commands.Choice(name='no', value="no")
