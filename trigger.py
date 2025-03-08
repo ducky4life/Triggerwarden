@@ -17,6 +17,16 @@ sans.set_agent("Ducky")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
 
 
+async def send_codeblock(ctx, msg):
+    if len(msg) > 1993:
+        first_msg = msg[:1993]
+        second_msg = msg[1993:].strip()
+        await ctx.send(f"```{first_msg}```")
+        await ctx.send(f"```{second_msg}```")
+    else:
+        await ctx.send(f"```{msg}```")
+
+
 @client.event
 async def on_ready():
     print('ready')
@@ -38,6 +48,7 @@ async def region(regions, channel_id):
             channel = await client.fetch_channel(channel_id)
             if "updated." in event["str"]:
                 await channel.send(event["str"])
+
 
 
 @client.hybrid_command(description="connect to sse with the changes bucket")
@@ -68,6 +79,128 @@ async def regiontrigger(ctx, regions:str=None, channel:discord.TextChannel=None)
             await interaction.response.edit_message(content='SSE has been stopped', view=None)
 
     await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
+
+
+
+@client.hybrid_command()
+@app_commands.describe(moveplusendorse="m+e if yes")
+@app_commands.choices(moveplusendorse=[
+    app_commands.Choice(name='m+e', value="m+e"),
+    app_commands.Choice(name='no', value="no")
+])
+async def warning(ctx, point=None, region=None, *, moveplusendorse="no", native=None):
+    match moveplusendorse:
+        case "no":
+            ten = f"""<@&272392896806912000>
+**__Ten Minute Warning.__**
+
+Make sure you have prepared a World Assembly nation in our jump point, https://www.nationstates.net/region=artificial_solar_system
+
+**Endorse this nation and __ALL__ the nations endorsing it: {point}**
+
+The next ping will be a five minute warning."""
+            
+            five = f"""<@&272392896806912000>
+**__Five Minute Warning__**
+**DO NOT MOVE YET - PREPARE**
+
+Our target region: {region} Have this page open.
+
+**Make sure you have endorsed this nation and all nations endorsing it: {point}**
+
+**DO NOT move until the move order is given.**
+The next ping will be a two minute warning."""
+            
+            two = f"""<@&272392896806912000>
+**__Two Minute Warning__**
+**DO NOT MOVE YET - RADIO SILENCE - DO NOT SPEAK**
+
+Our target region: {region} Have this page open.
+
+**Make sure you have endorsed this nation and all nations endorsing it: {point}**
+
+**__DO NOT MOVE YET__**
+
+The next ping will be a movement order. **Be ready to move as fast as you can.** ***You will only have a few seconds***"""
+            
+            fpm = f"""<@&272392896806912000>
+**__Two Minute Warning__**
+**DO NOT MOVE YET - RADIO SILENCE - DO NOT SPEAK**
+
+Our target region: {region} Have this page open.
+
+**Make sure you have endorsed this nation and all nations endorsing it: {point}**
+
+Our cross has moved now, **do not follow.**
+
+**__DO NOT MOVE YET__**
+
+The next ping will be a movement order. **Be ready to move as fast as you can.** ***You will only have a few seconds***"""
+            
+            go = "<@&272392896806912000> GO GO GO"
+        
+        case "m+e":
+            ten = f"""<@&272392896806912000>
+**__Ten Minute Warning.__**
+
+Make sure you have prepared a World Assembly nation in our jump point, https://www.nationstates.net/region=artificial_solar_system
+
+**Endorse this nation and __ALL__ the nations endorsing it: {point}**
+
+The next ping will be a five minute warning."""
+            
+            five = f"""<@&272392896806912000>
+**__Five Minute Warning__**
+**DO NOT MOVE YET - PREPARE**
+
+Our target region: {region} Have this page open.
+
+**Make sure you have endorsed this nation and all nations endorsing it: {point}**
+
+**After moving, we will immediately endorse {native}. ** Have this page open.
+
+ **DO NOT move until the move order is given.**
+The next ping will be a two minute warning."""
+
+            two = f"""<@&272392896806912000>
+**__Two Minute Warning__**
+**DO NOT MOVE YET - RADIO SILENCE - DO NOT SPEAK**
+
+Target region: {region} Have this page open and refresh it once now.
+
+**Make sure you have endorsed this nation and all nations endorsing it: {point}**
+
+**After moving, we will immediately endorse {native}. ** Have this page open and refresh it once now.
+
+**__DO NOT MOVE YET__**
+
+The next ping will be a movement order. **Be ready to move as fast as you can.** ***You will only have a few seconds***"""
+            
+            fpm = f"""<@&272392896806912000>
+**__Two Minute Warning__**
+**DO NOT MOVE YET - RADIO SILENCE - DO NOT SPEAK**
+
+Target region: {region} Have this page open and refresh it once now.
+
+**Make sure you have endorsed this nation and all nations endorsing it: {point}**
+
+Our cross has moved now, **do not follow.**
+
+**After moving, we will immediately endorse {native}. ** Have this page open and refresh it once now.
+
+**__DO NOT MOVE YET__**
+
+The next ping will be a movement order. **Be ready to move as fast as you can.** ***You will only have a few seconds***"""
+            
+            go = f"<@&272392896806912000> GO Endo {native}"
+
+    await send_codeblock(ctx, ten)
+    await send_codeblock(ctx, five)
+    await send_codeblock(ctx, two)
+    await ctx.send("fpm 2 minute warning:")
+    await send_codeblock(ctx, fpm)
+    await send_codeblock(ctx, go)
+
 
 
 keep_alive.keep_alive()
