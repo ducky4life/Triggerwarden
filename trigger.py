@@ -50,6 +50,24 @@ async def region(regions, channel_id):
                 await channel.send(event["str"])
 
 
+async def getpopulation(nation):
+    request = sans.Nation(nation, "census", scale="3")
+    root = sans.get(request).xml
+    sans.indent(root)
+    return(root[0][0][0].text)
+
+async def population(nations, channel_id):
+    channel = await client.fetch_channel(channel_id)
+
+    for nation in nations:
+        nation["population"] = await getpopulation(nation["name"])
+
+    while True:
+        for nation in nations:
+            if await getpopulation(nation["name"]) == nation["population"]:
+                await channel.send(f"Population of {nation['name']} has changed")
+
+
 
 @client.hybrid_command(description="connect to sse with the changes bucket")
 @app_commands.describe(nations="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'nation1,nation2,nation3'", channel="what channel to send sse activities to")
@@ -81,14 +99,44 @@ async def regiontrigger(ctx, regions:str=None, channel:discord.TextChannel=None)
     await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
 
 
+@client.hybrid_command(description="watch for population changes")
+@app_commands.describe(nations="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'nation1,nation2,nation3'", channel="what channel to send population updates to")
+async def populationtrigger(ctx, nations:str=None, channel:discord.TextChannel=None):
+    allowed_users = os.getenv("POPULATION_ALLOWED_USERS").split(",")
+    allowed_roles = os.getenv("POPULATION_ALLOWED_ROLES").split(",")
+    author_roles = [role.id for role in ctx.message.author.roles]
 
-@client.hybrid_command()
+    allowed = False
+
+    for role in allowed_roles:
+        if int(role) in author_roles or str(ctx.message.author.id) in allowed_users:
+            allowed = True
+
+    if allowed == True:
+        nation_list = nations.split(",")
+        nation_dict = [{"name": nation} for nation in nation_list]
+        task = asyncio.create_task(population(nation_dict, channel.id))
+
+        class Buttons(discord.ui.View):
+            @discord.ui.button(label='Stop API', style=discord.ButtonStyle.red)
+            async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+                task.cancel()
+                await interaction.response.edit_message(content='Tracking has been stopped', view=None)
+
+        await ctx.send("Connected to API, please remember to stop when done so Ducky doesn't spam the API",view=Buttons())
+        
+    else:
+        await ctx.send("You do not have permission to use this command, please contact Ducky")
+
+
+
+@client.hybrid_command(description="sends liberation warning messages. please input links. supports m+e and fpm")
 @app_commands.describe(moveplusendorse="m+e if yes")
 @app_commands.choices(moveplusendorse=[
     app_commands.Choice(name='m+e', value="m+e"),
     app_commands.Choice(name='no', value="no")
 ])
-async def warning(ctx, point=None, region=None, *, moveplusendorse="no", native=None):
+async def warningmessage(ctx, point=None, region=None, *, moveplusendorse="no", native=None):
     match moveplusendorse:
         case "no":
             ten = f"""<@&272392896806912000>

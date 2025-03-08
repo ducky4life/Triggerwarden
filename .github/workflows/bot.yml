@@ -13,6 +13,8 @@ permissions:
 
 env:
   TOKEN : ${{ secrets.NS_TOKEN }}
+  POPULATION_ALLOWED_USERS : ${{ secrets.POPULATION_ALLOWED_USERS }}
+  POPULATION_ALLOWED_ROLES : ${{ secrets.POPULATION_ALLOWED_ROLES }}
 
 concurrency:
   group: ${{ github.ref }}
@@ -34,10 +36,12 @@ jobs:
         python -m pip install --upgrade pip
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
-    - name: write token
+    - name: write secrets
       run: |
         touch .env
         echo "NS_TOKEN=$TOKEN" >> .env
+        echo "POPULATION_ALLOWED_USERS=$POPULATION_ALLOWED_USERS" >> .env
+        echo "POPULATION_ALLOWED_ROLES=$POPULATION_ALLOWED_ROLES" >> .env
 
     - name: run bot
       run: python trigger.py
