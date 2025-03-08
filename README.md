@@ -15,7 +15,7 @@ the bot restarts every 6 hours, so if it's down, wait a bit or message Ducky. sh
 
 ## host it yourself!
 
-population triggers is whitelist only because it hammers the api until stopped instead of just requesting a sse endpoint using my useragent. host the bot yourself to bypass the restriction!
+population triggers is whitelist only because it hammers the api until stopped using my useragent instead of just requesting a sse endpoint. host the bot yourself to bypass the restriction!
 
 ### steps
 
