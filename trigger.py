@@ -12,7 +12,7 @@ intents.members = True
 
 load_dotenv()
 
-token = os.getenv("ROBO_TOKEN")
+token = os.getenv("NS_TOKEN")
 sans.set_agent("Ducky")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
 
