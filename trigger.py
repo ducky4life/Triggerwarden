@@ -12,7 +12,7 @@ intents.members = True
 
 load_dotenv()
 
-token = os.getenv("NS_TOKEN")
+token = os.getenv("ROBO_TOKEN")
 sans.set_agent("Ducky")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
 
@@ -58,13 +58,16 @@ async def getpopulation(nation):
 
 async def population(nations, channel_id):
     channel = await client.fetch_channel(channel_id)
+    spam_channel = await client.fetch_channel(1347795725676843010) # does not work without this
 
     for nation in nations:
         nation["population"] = await getpopulation(nation["name"])
 
     while True:
         for nation in nations:
-            if await getpopulation(nation["name"]) != nation["population"]:
+            if await getpopulation(nation["name"]) == nation["population"]:
+                await spam_channel.send("hello getting population")
+            else:
                 await channel.send(f"Population of {nation['name']} has changed")
 
 
@@ -123,7 +126,7 @@ async def populationtrigger(ctx, nations:str=None, channel:discord.TextChannel=N
                 task.cancel()
                 await interaction.response.edit_message(content='Tracking has been stopped', view=None)
 
-        await ctx.send("Connected to API, please remember to stop when done so Ducky doesn't spam the API",view=Buttons())
+        await ctx.send("Connected to API, please remember to stop when done so Ducky doesn't spam the API",view=Buttons(timeout=None))
         
     else:
         await ctx.send("You do not have permission to use this command, please contact Ducky")
