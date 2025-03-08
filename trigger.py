@@ -63,12 +63,13 @@ async def population(nations, channel_id):
     for nation in nations:
         nation["population"] = await getpopulation(nation["name"])
 
-    while True:
+    while nations != []:
         for nation in nations:
             if await getpopulation(nation["name"]) == nation["population"]:
                 await spam_channel.send("hello getting population")
             else:
                 await channel.send(f"Population of {nation['name']} has changed")
+                nations.remove(nation)
 
 
 
