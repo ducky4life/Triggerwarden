@@ -13,7 +13,7 @@ permissions:
 
 env:
   TOKEN : ${{ secrets.NS_TOKEN }}
-  USERAGENT : ${{ secrets.USEREGENT }}
+  USERAGENT : ${{ secrets.USERAGENT }}
   POPULATION_ALLOWED_USERS : ${{ secrets.POPULATION_ALLOWED_USERS }}
   POPULATION_ALLOWED_ROLES : ${{ secrets.POPULATION_ALLOWED_ROLES }}
   SPAM_CHANNEL : ${{ secrets.SPAM_CHANNEL }}
