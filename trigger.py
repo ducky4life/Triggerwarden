@@ -7,12 +7,12 @@ import keep_alive
 from dotenv import load_dotenv
 import sans
 
-useragent = os.getenv("USERAGENT")
 intents = discord.Intents.all()
 intents.members = True
 
 load_dotenv()
 
+useragent = os.getenv("USERAGENT")
 token = os.getenv("NS_TOKEN")
 sans.set_agent(f"Triggerwarden Discord bot by Ducky used by {useragent}")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
