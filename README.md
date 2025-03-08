@@ -22,25 +22,27 @@ population triggers is whitelist only because it hammers the api until stopped u
 make sure you have [python](https://www.python.org/downloads/) installed.
 
 1. clone the repository
-```
-git clone https://github.com/ducky4life/triggerwarden.git
-```
+   ```
+   git clone https://github.com/ducky4life/triggerwarden.git
+   ```
 2. install dependencies
-```
-pip install -r requirements.txt
-```
+   ```
+   pip install -r requirements.txt
+   ```
 3. create .env file
-```
-touch .env
-```
+   ```
+   touch .env
+   ```
 4. put your secrets in the .env file
-   - `USERAGENT="[your main nation name]"`
-   - `NS_TOKEN="[your bot token]"`
-   - `POPULATION_ALLOWED_USERS="[user ids seperated by commas]"`
-   - `POPULATION_ALLOWED_ROLES="[role ids seperated by commas]"`
-   - `SPAM_CHANNEL=[a channel id for the bot to send a message every time it sends an API request]`
+   ```
+   USERAGENT="[your main nation name]"
+   NS_TOKEN="[your bot token]"
+   POPULATION_ALLOWED_USERS="[user ids seperated by commas]"
+   POPULATION_ALLOWED_ROLES="[role ids seperated by commas]"
+   SPAM_CHANNEL=[a channel id for the bot to send a message every time it sends an API request]
+   ```
 
-5. run trigger.py
-```
-py trigger.py
-```
+6. run trigger.py
+   ```
+   py trigger.py
+   ```
