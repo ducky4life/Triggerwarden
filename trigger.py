@@ -64,7 +64,7 @@ async def population(nations, channel_id):
 
     while True:
         for nation in nations:
-            if await getpopulation(nation["name"]) == nation["population"]:
+            if await getpopulation(nation["name"]) != nation["population"]:
                 await channel.send(f"Population of {nation['name']} has changed")
 
 
