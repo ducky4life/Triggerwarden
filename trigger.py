@@ -12,7 +12,7 @@ intents.members = True
 
 load_dotenv()
 
-token = os.getenv("NS_TOKEN")
+token = os.getenv("ROBO_TOKEN")
 sans.set_agent("Ducky")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
 
@@ -58,7 +58,7 @@ async def getpopulation(nation):
 
 async def population(nations, channel_id):
     channel = await client.fetch_channel(channel_id)
-    spam_channel = await client.fetch_channel(1347795725676843010) # does not work without this
+    spam_channel = await client.fetch_channel(int(os.getenv("SPAM_CHANNEL"))) # does not work without this
 
     for nation in nations:
         nation["population"] = await getpopulation(nation["name"])

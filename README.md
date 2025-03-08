@@ -37,6 +37,7 @@ touch .env
    - `NS_TOKEN="[your bot token]"`
    - `POPULATION_ALLOWED_USERS="[user ids seperated by commas]"`
    - `POPULATION_ALLOWED_ROLES="[role ids seperated by commas]"`
+   - `SPAM_CHANNEL=[a channel id for the bot to send a message every time it sends an API request]`
 
 5. run trigger.py
 ```
