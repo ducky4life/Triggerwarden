@@ -12,7 +12,7 @@ intents.members = True
 
 load_dotenv()
 
-token = os.getenv("NS_TOKEN")
+token = os.getenv("ROBO_TOKEN")
 sans.set_agent("Ducky")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
 
@@ -70,6 +70,8 @@ async def population(nations, channel_id):
             else:
                 await channel.send(f"Population of {nation['name']} has changed")
                 nations.remove(nation)
+    await channel.send("All nations have their population updated, stopping")
+    asyncio.current_task().cancel()
 
 
 
