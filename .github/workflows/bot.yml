@@ -13,6 +13,7 @@ permissions:
 
 env:
   TOKEN : ${{ secrets.NS_TOKEN }}
+  USERAGENT : ${{ secrets.USEREGENT }}
   POPULATION_ALLOWED_USERS : ${{ secrets.POPULATION_ALLOWED_USERS }}
   POPULATION_ALLOWED_ROLES : ${{ secrets.POPULATION_ALLOWED_ROLES }}
   SPAM_CHANNEL : ${{ secrets.SPAM_CHANNEL }}
@@ -44,6 +45,7 @@ jobs:
         echo "POPULATION_ALLOWED_USERS=$POPULATION_ALLOWED_USERS" >> .env
         echo "POPULATION_ALLOWED_ROLES=$POPULATION_ALLOWED_ROLES" >> .env
         echo "SPAM_CHANNEL=$SPAM_CHANNEL" >> .env
+        echo "USERAGENT=$USERAGENT" >> .env
 
     - name: run bot
       run: python trigger.py

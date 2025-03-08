@@ -34,6 +34,7 @@ pip install -r requirements.txt
 touch .env
 ```
 4. put your secrets in the .env file
+   - `USERAGENT="[your main nation name]"`
    - `NS_TOKEN="[your bot token]"`
    - `POPULATION_ALLOWED_USERS="[user ids seperated by commas]"`
    - `POPULATION_ALLOWED_ROLES="[role ids seperated by commas]"`
