@@ -31,6 +31,7 @@ async def send_codeblock(ctx, msg):
 @client.event
 async def on_ready():
     print('ready')
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.listening, name="Who You Gonna Call?"))
     await client.tree.sync()
 
 
