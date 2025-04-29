@@ -8,6 +8,8 @@ triggerwarden is a discord bot that connects to the nationstates sse api and sen
 - region triggers
 - nation triggers
 - population triggers (user/role whitelist only, contact Ducky on discord or ducky4life@duck.com)
+- influence triggers (same as pop triggers)
+- banject activity (for ejection spotting in sieges)
 
 it can also print out warning messages for liberations as a bonus
 
