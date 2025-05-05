@@ -13,7 +13,7 @@ intents.members = True
 load_dotenv()
 
 useragent = os.getenv("USERAGENT")
-token = os.getenv("NS_TOKEN")
+token = os.getenv("ROBO_TOKEN")
 sans.set_agent(f"Triggerwarden Discord bot by Ducky used by {useragent}")
 client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
 
@@ -43,13 +43,19 @@ async def nation(nations, channel_id):
             if "influence in" in event["str"]:
                 await channel.send(event["str"])
 
-
 async def region(regions, channel_id):
     async with sans.AsyncClient() as asyncclient:
         async for event in sans.serversent_events(asyncclient, "admin").view(regions=regions):
             channel = await client.fetch_channel(channel_id)
             if "updated." in event["str"]:
                 await channel.send(event["str"])
+
+async def banject(regions, channel_id):
+    async with sans.AsyncClient() as asyncclient:
+        async for event in sans.serversent_events(asyncclient, "eject").view(regions=regions):
+            channel = await client.fetch_channel(channel_id)
+            await channel.send(event["str"])
+
 
 
 async def getpopulation(nation):
@@ -101,42 +107,48 @@ async def influence(nations, channel_id):
     asyncio.current_task().cancel()
 
 
-async def banject(regions, channel_id):
-    async with sans.AsyncClient() as asyncclient:
-        async for event in sans.serversent_events(asyncclient, "eject").view(regions=regions):
-            channel = await client.fetch_channel(channel_id)
-            await channel.send(event["str"])
 
+
+
+async def SSEtrigger(ctx, type:str, targets:str=None, channel:discord.TextChannel=None):
+    target_list = targets.split(",")
+    if channel == None:
+        channel = ctx.channel
+
+    if type == "nation":
+        task = asyncio.create_task(nation(target_list, channel.id))
+    elif type == "region":
+        task = asyncio.create_task(region(target_list, channel.id))
+    elif type == "banject":
+        task = asyncio.create_task(banject(target_list, channel.id))
+
+    class Buttons(discord.ui.View):
+        @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
+        async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+            task.cancel()
+            await interaction.response.edit_message(content='SSE has been stopped', view=None)
+
+    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
 
 
 @client.hybrid_command(description="connect to sse with the changes bucket")
 @app_commands.describe(nations="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'nation1,nation2,nation3'", channel="what channel to send sse activities to")
 async def nationtrigger(ctx, nations:str=None, channel:discord.TextChannel=None):
-    nation_list = nations.split(",")
-    task = asyncio.create_task(nation(nation_list, channel.id))
-
-    class Buttons(discord.ui.View):
-        @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
-        async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-            task.cancel()
-            await interaction.response.edit_message(content='SSE has been stopped', view=None)
-
-    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
+    await SSEtrigger(ctx, "nation", nations, channel)
 
 
 @client.hybrid_command(description="connect to sse with the admin bucket")
 @app_commands.describe(regions="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'region1,region2,region3'", channel="what channel to send sse activities to")
 async def regiontrigger(ctx, regions:str=None, channel:discord.TextChannel=None):
-    region_list = regions.split(",")
-    task = asyncio.create_task(region(region_list, channel.id))
+    await SSEtrigger(ctx, "region", regions, channel)
 
-    class Buttons(discord.ui.View):
-        @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
-        async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-            task.cancel()
-            await interaction.response.edit_message(content='SSE has been stopped', view=None)
 
-    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
+@client.hybrid_command(description="watch for banjects")
+@app_commands.describe(regions="list of regions to track, separated by commas. do not put spaces after commas. e.g. 'region1,region2,region3'", channel="what channel to send sse activities to")
+async def banjectactivity(ctx, regions:str=None, channel:discord.TextChannel=None):
+    await SSEtrigger(ctx, "banject", regions, channel)
+
+
 
 
 @client.hybrid_command(description="watch for population changes")
@@ -201,19 +213,6 @@ async def influencetrigger(ctx, nations:str=None, channel:discord.TextChannel=No
 
 
 
-@client.hybrid_command(description="watch for banjects")
-@app_commands.describe(regions="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'region1,region2,region3'", channel="what channel to send sse activities to")
-async def banjectactivity(ctx, regions:str=None, channel:discord.TextChannel=None):
-    region_list = regions.split(",")
-    task = asyncio.create_task(banject(region_list, channel.id))
-
-    class Buttons(discord.ui.View):
-        @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
-        async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
-            task.cancel()
-            await interaction.response.edit_message(content='SSE has been stopped', view=None)
-
-    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
 
 
 
