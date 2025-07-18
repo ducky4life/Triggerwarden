@@ -15,7 +15,7 @@ load_dotenv()
 useragent = str(os.getenv("USERAGENT"))
 token = str(os.getenv("NS_TOKEN"))
 sans.set_agent(f"Triggerwarden Discord bot by Ducky used by {useragent}")
-client = commands.Bot(command_prefix=["!ns", "!ns "], intents=intents)
+client = commands.Bot(command_prefix=["!ns "], intents=intents)
 
 
 async def send_codeblock(ctx, msg):
