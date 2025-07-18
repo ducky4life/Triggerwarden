@@ -12,10 +12,10 @@ intents.message_content = True
 
 load_dotenv()
 
-useragent = os.getenv("USERAGENT")
-token = os.getenv("NS_TOKEN")
+useragent = str(os.getenv("USERAGENT"))
+token = str(os.getenv("NS_TOKEN"))
 sans.set_agent(f"Triggerwarden Discord bot by Ducky used by {useragent}")
-client = commands.Bot(command_prefix=["!ns ", "!ns "], intents=intents)
+client = commands.Bot(command_prefix=["!ns", "!ns "], intents=intents)
 
 
 async def send_codeblock(ctx, msg):
@@ -154,8 +154,8 @@ async def banjectactivity(ctx, regions:str=None, channel:discord.TextChannel=Non
 @client.hybrid_command(description="watch for population changes")
 @app_commands.describe(nations="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'nation1,nation2,nation3'", channel="what channel to send population updates to")
 async def populationtrigger(ctx, nations:str=None, channel:discord.TextChannel=None):
-    allowed_users = os.getenv("POPULATION_ALLOWED_USERS").split(",")
-    allowed_roles = os.getenv("POPULATION_ALLOWED_ROLES").split(",")
+    allowed_users = str(os.getenv("POPULATION_ALLOWED_USERS")).split(",")
+    allowed_roles = str(os.getenv("POPULATION_ALLOWED_ROLES")).split(",")
     author_roles = [role.id for role in ctx.message.author.roles]
 
     allowed = False
@@ -185,8 +185,8 @@ async def populationtrigger(ctx, nations:str=None, channel:discord.TextChannel=N
 @client.hybrid_command(description="watch for influence changes")
 @app_commands.describe(nations="list of nations to track, separated by commas. do not put spaces after commas. e.g. 'nation1,nation2,nation3'", channel="what channel to send influence updates to")
 async def influencetrigger(ctx, nations:str=None, channel:discord.TextChannel=None):
-    allowed_users = os.getenv("POPULATION_ALLOWED_USERS").split(",")
-    allowed_roles = os.getenv("POPULATION_ALLOWED_ROLES").split(",")
+    allowed_users = str(os.getenv("POPULATION_ALLOWED_USERS")).split(",")
+    allowed_roles = str(os.getenv("POPULATION_ALLOWED_ROLES")).split(",")
     author_roles = [role.id for role in ctx.message.author.roles]
 
     allowed = False
