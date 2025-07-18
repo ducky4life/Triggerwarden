@@ -7,8 +7,8 @@ import keep_alive
 from dotenv import load_dotenv
 import sans
 
-intents = discord.Intents.all()
-intents.members = True
+intents = discord.Intents.default()
+intents.message_content = True
 
 load_dotenv()
 
