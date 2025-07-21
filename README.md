@@ -71,7 +71,7 @@ make sure you have [docker](https://www.docker.com) installed. create a discord 
    ```
    touch .env
    ```
-4. put your secrets in the .env file (without the brackets: [ ])
+4. put your secrets in the .env file (without the brackets: `[ ]`)
    ```
    USERAGENT="[your main nation name]"
    NS_TOKEN="[your bot token]"
