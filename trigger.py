@@ -56,6 +56,11 @@ async def banject(regions, channel_id):
             channel = await client.fetch_channel(channel_id)
             await channel.send(event["str"])
 
+async def connect_sse_bucket(type, filter, bucket, channel_id):
+    pass # unfinished
+    # async with sans.AsyncClient() as asyncclient:
+        
+
 
 
 async def getpopulation(nation):
@@ -121,6 +126,22 @@ async def SSEtrigger(ctx, type:str, targets:str=None, channel:discord.TextChanne
         task = asyncio.create_task(region(target_list, channel.id))
     elif type == "banject":
         task = asyncio.create_task(banject(target_list, channel.id))
+
+    class Buttons(discord.ui.View):
+        @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
+        async def on_button_click(self, interaction: discord.Interaction, button: discord.ui.Button) -> None:
+            task.cancel()
+            await interaction.response.edit_message(content='SSE has been stopped', view=None)
+
+    await ctx.send("Connected, click button to stop SSE",view=Buttons(timeout=None))
+
+
+async def SSEconnect(ctx, type:str, targets:str=None, buckets:str=None, channel:discord.TextChannel=None):
+    target_list = targets.split(",")
+    if channel == None:
+        channel = ctx.channel
+        
+    task = asyncio.create_task(connect_sse_bucket(type, target_list, buckets, channel.id)
 
     class Buttons(discord.ui.View):
         @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
