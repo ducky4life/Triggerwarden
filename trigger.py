@@ -141,7 +141,7 @@ async def SSEconnect(ctx, type:str, targets:str=None, buckets:str=None, channel:
     if channel == None:
         channel = ctx.channel
         
-    task = asyncio.create_task(connect_sse_bucket(type, target_list, buckets, channel.id)
+    task = asyncio.create_task(connect_sse_bucket(type, target_list, buckets, channel.id))
 
     class Buttons(discord.ui.View):
         @discord.ui.button(label='Stop SSE', style=discord.ButtonStyle.red)
